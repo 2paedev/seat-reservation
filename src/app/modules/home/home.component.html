@@ -1,0 +1,42 @@
+<section class="home">
+
+  <div class="home__form">
+    <div class="home__form-config">
+      <mat-form-field class="form-input" appearance="fill">
+        <mat-label>Nº de filas</mat-label>
+        <input matInput placeholder="Ex. 100" [(ngModel)]="rows" value="0" [disabled]="isEditMode">
+      </mat-form-field>
+
+      <mat-form-field class="form-input" appearance="fill">
+        <mat-label>Nº de columnas</mat-label>
+        <input matInput placeholder="Ex. 100" [(ngModel)]="cols" value="0" [disabled]="isEditMode">
+      </mat-form-field>
+
+      <div>
+        <button mat-raised-button color="primary" (click)="createGrid()" [disabled]="isEditMode">Crear grid</button>
+        <button mat-raised-button color="primary" (click)="cleanGrid()" [disabled]="isEditMode">Limpiar</button>
+      </div>
+    </div>
+
+    <div class="home__form-btn">
+      <button mat-stroked-button color="primary" (click)="toggleEditMode()" *ngIf="!isEditMode">Activar Modo Edición</button>
+      <button mat-raised-button color="primary" (click)="toggleEditMode()" *ngIf="isEditMode">Activar Modo Visionado</button>
+      <button mat-raised-button color="accent" [disabled]="!isEditMode" (click)="createSeats()">Crear asientos</button>
+    </div>
+  </div>
+
+  <div class="home__grid" cdkDropListGroup [ngStyle]="{'grid-template-columns': 'repeat('+gridInfo.numCols+', 1rem)', 'grid-template-rows': 'repeat('+gridInfo.numRows+', 1rem)' }">
+    <ng-container *ngFor="let item of gridInfo.roomCells;let i=index">
+      <div class="home__cell" [ngClass]="{'home__cell--selected': item.selected && isEditMode}" cdkDropList  cdkDropListOrientation="horizontal" [cdkDropListData]="{item:item,index:i}" (cdkDropListDropped)="drop($event)" (click)="selectingCell(item)">
+        <div class="home__seat" cdkDrag *ngIf="item.numSeat !== null && !isEditMode">
+          <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+          <!--{{item.numCellRoom}}-->
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="home__actions">
+    <button mat-raised-button  color="primary" (click)="saveRoom()">Crear sala</button>
+  </div>
+</section>
